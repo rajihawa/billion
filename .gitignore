@@ -1,2 +1,5 @@
 # Nodejs modules
 node_modules
+
+# Build files
+dist

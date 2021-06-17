@@ -2,6 +2,10 @@
   "name": "billionjs",
   "version": "0.0.1",
   "description": "The smallest and fastest frontend framework",
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean"
+  },
   "author": {
     "name": "Raji Hawa",
     "email": "rajihawa@protonmail.com",
