@@ -2,5 +2,8 @@
   "name": "billionjs",
   "version": "0.0.1",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "million": "^0.1.0"
+  }
 }
