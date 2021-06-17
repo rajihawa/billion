@@ -1,8 +1,45 @@
 {
   "name": "billionjs",
   "version": "0.0.1",
-  "main": "index.js",
+  "description": "The smallest and fastest frontend framework",
+  "author": {
+    "name": "Raji Hawa",
+    "email": "rajihawa@protonmail.com",
+    "url": "https://rajihawa.com"
+  },
+  "main": "dist/billion.js",
+  "module": "dist/billion.esm.js",
+  "browser": "dist/billion.min.js",
+  "types": "dist/billion.d.ts",
+  "exports": {
+    "browser": "./dist/billion.min.js",
+    "require": "./dist/billion.cjs.js",
+    "import": "./dist/billion.esm.js"
+  },
+  "keywords": [
+    "billion",
+    "frontend",
+    "library",
+    "framework",
+    "web",
+    "ui",
+    "browser"
+  ],
+  "contributors": [
+    "Raji Hawa <rajihawa@protonmail.com>"
+  ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rajihawa/billion"
+  },
+  "homepage": "https://github.com/rajihawa/billion",
+  "bugs": {
+    "url": "https://github.com/rajihawa/billion/issues"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "dependencies": {
     "million": "^0.1.0"
   },
