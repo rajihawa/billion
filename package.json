@@ -4,7 +4,8 @@
   "description": "The smallest and fastest frontend framework",
   "scripts": {
     "build": "tsc --build",
-    "clean": "tsc --build --clean"
+    "clean": "tsc --build --clean",
+    "watch": "tsc --build --watch"
   },
   "author": {
     "name": "Raji Hawa",
