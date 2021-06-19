@@ -4,9 +4,9 @@ Billionjs is a frontend framework that targets micro-frontends and small-scale p
 
 ### Features
 
-- [ ] Object based templates
-- [ ] built-in router
+- [x] JS Object based templates
 - [ ] centralized flux store
+- [ ] built-in router
 
 ### dependencies
 
