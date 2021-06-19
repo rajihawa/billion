@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "watch": "tsc --build --watch"
+    "watch": "tsc --build --watch",
+    "lint": "eslint src/** --quiet --fix"
   },
   "author": {
     "name": "Raji Hawa",
