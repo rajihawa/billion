@@ -1,10 +1,6 @@
 import { Template, templateToElement } from "./template";
 
-type App = {
-  root: HTMLElement | Text;
-};
-
-export const createApp = (selector: string, template: Template<any>): App => {
+export const createApp = (selector: string, template: Template<any>) => {
   // Find the root element to build app on
   const root = document.querySelector(selector);
   if (root == null) {
@@ -16,9 +12,4 @@ export const createApp = (selector: string, template: Template<any>): App => {
 
   // inject the element into the DOM
   root.appendChild(element);
-
-  // initiate and return a new app instance
-  return {
-    root: element,
-  };
 };
