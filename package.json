@@ -8,7 +8,7 @@
         "watch": "tsc --build --watch",
         "lint": "eslint src/** --quiet --fix",
         "format": "prettier --write src --parser typescript",
-        "prepare": "husky prepare"
+        "prepare": "husky install"
     },
     "author": {
         "name": "Raji Hawa",
