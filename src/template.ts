@@ -17,10 +17,12 @@ export enum Tags {
   button = "button",
 }
 
+type defaultPropsType = {};
+
 export type Template = {
   tag: keyof typeof Tags;
   options?: Options;
-  children?: BT[] | string;
+  children?: Template[] | string;
 };
 
 export type Options = VProps & {
@@ -30,7 +32,7 @@ export type Options = VProps & {
   style?: Record<string, string>;
 };
 
-export type BT = () => Template;
+export type BT<T = defaultPropsType> = (props?: T) => Template;
 
 // turn the template object into an optimized vnode object to be used by million
 const templateToNode = (template: Template): VNode =>
@@ -54,8 +56,8 @@ const templateToNode = (template: Template): VNode =>
   );
 
 // recurse over all children
-const parseChildren = (children: BT[]): VNode[] | undefined =>
-  children?.map((child) => templateToNode(child()));
+const parseChildren = (children: Template[]): VNode[] | undefined =>
+  children?.map((child) => templateToNode(child));
 
 // turn template into HTML element
 export const templateToElement = (template: Template): HTMLElement | Text => {
