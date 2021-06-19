@@ -12,7 +12,5 @@ export const CssToString = (styles: styles): string => {
         return acc;
     }, {});
 
-    
-
     return style(mStyles);
 };

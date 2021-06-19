@@ -1,3 +1,4 @@
-yarn format 
-yarn lint 
-git add -A
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+yarn format && yarn lint && git add -A .
