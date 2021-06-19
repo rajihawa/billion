@@ -1,6 +1,6 @@
 {
   "name": "billionjs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The smallest and fastest frontend framework",
   "scripts": {
     "build": "tsc --build",
@@ -46,6 +46,7 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
+    "csstype": "^3.0.8",
     "million": "^0.1.0"
   },
   "devDependencies": {

@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+csstype@^3.0.8:
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.8.tgz#d2266a792729fb227cd216fb572f43728e1ad340"
+  integrity sha512-jXKhWqXPmlUeoQnF/EhTtTl4C9SnrxSH/jZUih3jmO6lBKr99rP3/+FmrMj4EFpOXzMtXHAZkd3x0E6h6Fgflw==
+
 million@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/million/-/million-0.1.0.tgz#577db2a56fef049fce0572e64dbbfd02ca71da40"
