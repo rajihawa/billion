@@ -4,7 +4,7 @@ type App = {
   root: HTMLElement | Text;
 };
 
-export const createApp = (selector: string, template: Template): App => {
+export const createApp = (selector: string, template: Template<any>): App => {
   // Find the root element to build app on
   const root = document.querySelector(selector);
   if (root == null) {

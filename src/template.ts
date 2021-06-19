@@ -10,38 +10,43 @@ import {
 } from "million";
 import { CssToString, styles } from "./styles";
 
-// supported tags for better auto-complete
-export enum Tags {
-  div = "div",
-  input = "input",
-  button = "button",
-}
-
 type defaultPropsType = {};
+type defaultTemplate = keyof HTMLElementTagNameMap;
 
-export type Template = {
-  tag: keyof typeof Tags;
-  options?: Options;
-  children?: Template[] | string;
+// template definition
+export type Template<T extends defaultTemplate> = {
+  tag: T;
+  options?: Options<T>;
+  children?: Template<any>[] | string;
 };
 
-export type Options = VProps & {
-  key?: string;
-  id?: string;
-  className?: Record<string, boolean>;
-  style?: styles;
-};
+// template options
+export type Options<K extends defaultTemplate> = VProps &
+  Partial<HTMLElementTagNameMap[K]> & {
+    key?: string;
+    id?: string;
+    className?: Record<string, boolean>;
+    styles?: styles;
+  };
 
-export type BT<T = defaultPropsType> = (props?: T) => Template;
+// billion template function type
+export type BTF<T extends defaultTemplate = "div", P = defaultPropsType> = (
+  props?: P
+) => Template<T>;
 
 // turn the template object into an optimized vnode object to be used by million
-const templateToNode = (template: Template): VNode =>
-  m(
+const templateToNode = <T extends defaultTemplate = "div">(
+  template: Template<T>
+): VNode => {
+  console.log(template);
+  return m(
     template.tag,
     {
       ...template.options,
       className: MclassName(template.options?.className || {}),
-      style: template.options?.style ? CssToString(template.options.style) : "",
+      style: template.options?.styles
+        ? CssToString(template.options.styles)
+        : "",
     },
     typeof template.children == "string"
       ? [template.children]
@@ -54,13 +59,16 @@ const templateToNode = (template: Template): VNode =>
       ? VFlags.ANY_CHILDREN
       : VFlags.NO_CHILDREN
   );
+};
 
 // recurse over all children
-const parseChildren = (children: Template[]): VNode[] | undefined =>
+const parseChildren = (children: Template<any>[]): VNode[] | undefined =>
   children?.map((child) => templateToNode(child));
 
 // turn template into HTML element
-export const templateToElement = (template: Template): HTMLElement | Text => {
+export const templateToElement = (
+  template: Template<any>
+): HTMLElement | Text => {
   const vnode = templateToNode(template);
   const element = createElement(vnode);
   return element;
@@ -69,7 +77,7 @@ export const templateToElement = (template: Template): HTMLElement | Text => {
 // inject template into a parent element
 export const mountTemplate = (
   parent: HTMLElement | Text,
-  template: Template
+  template: Template<any>
 ) => {
   const vnode = templateToNode(template);
   patch(parent, vnode);
