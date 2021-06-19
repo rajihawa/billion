@@ -6,7 +6,9 @@
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "watch": "tsc --build --watch",
-    "lint": "eslint src/** --quiet --fix"
+    "lint": "eslint src/** --quiet --fix",
+    "format": "prettier --write src --parser typescript",
+    "prepare": "husky prepare"
   },
   "author": {
     "name": "Raji Hawa",
@@ -59,5 +61,10 @@
     "husky": "^6.0.0",
     "prettier": "^2.3.1",
     "typescript": "^4.3.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn format && yarn lint"
+    }
   }
 }
