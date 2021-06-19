@@ -7,8 +7,8 @@ import {
   VNode,
   VProps,
   className as MclassName,
-  style as Mstyle,
 } from "million";
+import { CssToString, styles } from "./styles";
 
 // supported tags for better auto-complete
 export enum Tags {
@@ -29,7 +29,7 @@ export type Options = VProps & {
   key?: string;
   id?: string;
   className?: Record<string, boolean>;
-  style?: Record<string, string>;
+  style?: styles;
 };
 
 export type BT<T = defaultPropsType> = (props?: T) => Template;
@@ -41,7 +41,7 @@ const templateToNode = (template: Template): VNode =>
     {
       ...template.options,
       className: MclassName(template.options?.className || {}),
-      style: Mstyle(template.options?.style || {}),
+      style: template.options?.style ? CssToString(template.options.style) : "",
     },
     typeof template.children == "string"
       ? [template.children]

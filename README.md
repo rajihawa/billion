@@ -11,3 +11,4 @@ Billionjs is a frontend framework that targets micro-frontends and small-scale p
 ### dependencies
 
 - [million](https://github.com/millionjs/million) 🌈 <1kb virtual DOM - it's fast!
+- [cssType](https://github.com/frenic/csstype) TypeScript and Flow definitions for CSS!
