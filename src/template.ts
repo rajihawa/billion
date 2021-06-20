@@ -1,37 +1,33 @@
 // the template engine of billion, Inspired by flutter.
-import { createElement, m, patch, VFlags, VNode, VProps, className as MclassName } from 'million';
+// templates are just minimal build blocks, it gets translated to HTML in the end
+import { createElement, m, VFlags, VNode, VProps, className as MclassName, svg } from 'million';
 import { CssToString, styles } from './styles';
 
-type defaultPropsType = Record<string, unknown>;
-export type defaultTemplate = keyof HTMLElementTagNameMap;
+type Tags = HTMLElementTagNameMap & SVGElementTagNameMap;
 
 // template definition
-export type Template<T extends defaultTemplate> = {
-    tag: T;
-    options?: Options<T>;
-    children?: Template<defaultTemplate>[] | string;
+export type Template = {
+    tag: keyof Tags;
+    options?: Options<'div'>;
+    children?: Template[] | string;
 };
 
 // template options
-export type Options<K extends defaultTemplate> = VProps &
-    Partial<HTMLElementTagNameMap[K]> & {
+export type Options<T extends keyof Tags> = VProps &
+    Partial<Tags[T]> & {
         key?: string;
         id?: string;
         className?: Record<string, boolean>;
         styles?: styles;
     };
 
-// billion template function type
-export type BTF<T extends defaultTemplate = 'div', P = defaultPropsType> = (props?: P) => Template<T>;
-
 // turn the template object into an optimized vnode object to be used by million
-const templateToNode = <T extends defaultTemplate = 'div'>(template: Template<T>): VNode => {
-    console.log(template);
-    return m(
+const templateToNode = (template: Template): VNode => {
+    const vnode = m(
         template.tag,
         {
             ...template.options,
-            className: MclassName(template.options?.className || {}),
+            className: template.options?.className ? MclassName(template.options.className) : '',
             style: template.options?.styles ? CssToString(template.options.styles) : '',
         },
         typeof template.children == 'string'
@@ -45,21 +41,28 @@ const templateToNode = <T extends defaultTemplate = 'div'>(template: Template<T>
             ? VFlags.ANY_CHILDREN
             : VFlags.NO_CHILDREN,
     );
+    return !template.options?.ns && template.tag === 'svg' ? svg(vnode) : vnode;
+};
+
+// faster and more elegant way to create templates
+export const newTemplate = <T extends keyof Tags>(
+    tag: keyof Tags,
+    opts: Options<T>,
+    children: Template[] | string,
+): Template => {
+    return {
+        tag,
+        options: opts,
+        children,
+    };
 };
 
 // recurse over all children
-const parseChildren = (children: Template<defaultTemplate>[]): VNode[] | undefined =>
-    children?.map((child) => templateToNode(child));
+const parseChildren = (children: Template[]): VNode[] | undefined => children?.map((child) => templateToNode(child));
 
 // turn template into HTML element
-export const templateToElement = (template: Template<defaultTemplate>): HTMLElement | Text => {
+export const templateToElement = (template: Template): HTMLElement | Text => {
     const vnode = templateToNode(template);
     const element = createElement(vnode);
     return element;
-};
-
-// inject template into a parent element
-export const mountTemplate = (parent: HTMLElement | Text, template: Template<defaultTemplate>): void => {
-    const vnode = templateToNode(template);
-    patch(parent, vnode);
 };
