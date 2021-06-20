@@ -1,6 +1,6 @@
 // the template engine of billion, Inspired by flutter.
 // templates are just minimal build blocks, it gets translated to HTML in the end
-import { createElement, m, patch, VFlags, VNode, VProps, className as MclassName, svg } from 'million';
+import { createElement, m, VFlags, VNode, VProps, className as MclassName, svg } from 'million';
 import { CssToString, styles } from './styles';
 
 type Tags = HTMLElementTagNameMap & SVGElementTagNameMap;
@@ -22,7 +22,7 @@ export type Options<T extends keyof Tags> = VProps &
     };
 
 // turn the template object into an optimized vnode object to be used by million
-export const templateToNode = (template: Template): VNode => {
+const templateToNode = (template: Template): VNode => {
     const vnode = m(
         template.tag,
         {
@@ -65,10 +65,4 @@ export const templateToElement = (template: Template): HTMLElement | Text => {
     const vnode = templateToNode(template);
     const element = createElement(vnode);
     return element;
-};
-
-// inject template into a parent element
-export const mountTemplate = (parent: HTMLElement | Text, template: Template): void => {
-    const vnode = templateToNode(template);
-    patch(parent, vnode);
 };

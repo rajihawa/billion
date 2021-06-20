@@ -1,12 +1,12 @@
 import { CF } from './component';
-import { templateToElement } from './template';
+import { templateToElement, newTemplate } from './template';
 
 // the Billion app type
 type Billion = {
     render: (component: CF<undefined>) => void;
 };
 
-const Billion: Billion = {
+const billion: Billion = {
     render: (component) => {
         // look for #app root element
         const root = document.querySelector('#app');
@@ -18,4 +18,4 @@ const Billion: Billion = {
     },
 };
 
-export default Billion;
+export default { ...billion, newTemplate };
