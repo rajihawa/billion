@@ -1,4 +1,6 @@
+import { patch } from 'million';
 import { Plugin } from './plugin';
+import { templateToNode } from './template';
 
 export type StoreOptions<S> = {
     state?: S;
@@ -19,11 +21,12 @@ export type UseCases<S> = {
     [k: string]: (this: Store<S>, data: unknown) => unknown;
 };
 
-export type Store<S> = {
+export type Store<S> = Plugin & {
     state?: S;
     get: (key: keyof Repository<S>) => unknown;
     run: (key: keyof UseCases<S>, data: unknown) => unknown;
     apply: (key: keyof Mutations<S>, data: unknown) => void;
+    update: () => void;
 };
 
 export const createStore = <S>(options: StoreOptions<S>): Store<S> => {
@@ -38,7 +41,9 @@ export const createStore = <S>(options: StoreOptions<S>): Store<S> => {
         },
         apply(key, data) {
             if (this.state && options.mutations) {
-                return options.mutations[key](this.state, data);
+                options.mutations[key](this.state, data);
+                this.update();
+                return;
             }
             throw new Error('mutations are not defined');
         },
@@ -48,9 +53,15 @@ export const createStore = <S>(options: StoreOptions<S>): Store<S> => {
             }
             throw new Error('repository is not defined');
         },
+        implement(app) {
+            this.update = () => {
+                if (app.rootEl) {
+                    patch(app.rootEl, templateToNode(app.component()));
+                }
+            };
+        },
+        update() {
+            return;
+        },
     };
-};
-
-export const billionX: Plugin = () => {
-    return;
 };

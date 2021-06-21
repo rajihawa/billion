@@ -12,6 +12,8 @@ export type Template = {
     children?: Template[] | string;
 };
 
+export type TF = () => Template;
+
 // template options
 export type Options<T extends keyof Tags> = VProps &
     Partial<Tags[T]> & {
@@ -49,8 +51,8 @@ export const templateToNode = (template: Template): VNode => {
 // faster and more elegant way to create templates
 export const newTemplate = <T extends keyof Tags>(
     tag: keyof Tags,
-    opts: Options<T>,
-    children: Template[] | string,
+    opts?: Options<T>,
+    children?: Template[] | string,
 ): Template => {
     return {
         tag,
