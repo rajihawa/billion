@@ -19,14 +19,14 @@ type UseCaseFunctions<S, R, M, U extends UseCaseArgs> = {
 };
 
 export type StoreOptions<S, R, M, U extends UseCaseArgs> = {
-    state?: S;
+    state: S;
     repository?: RepositoryFunctions<S, R>;
     mutations?: MutationFunctions<S, M>;
     useCases?: UseCaseFunctions<S, R, M, U>;
 };
 
 export type Store<S, R, M, U extends UseCaseArgs> = Plugin & {
-    state?: S;
+    state: S;
     get: (key: keyof R) => R[keyof R];
     run: (key: keyof U, data: Parameters<U[keyof U]>[0]) => ReturnType<U[keyof U]>;
     apply: (key: keyof M, data: M[keyof M]) => void;
