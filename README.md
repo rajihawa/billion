@@ -5,7 +5,8 @@ Billionjs is a frontend framework that targets micro-frontends and small-scale p
 ### Features
 
 -   [x] JS Object based templates
--   [ ] centralized flux store
+-   [x] centralized flux store
+-   [ ] create-billion-app cli
 -   [ ] built-in router
 
 ### dependencies
@@ -23,7 +24,7 @@ Billionjs is a frontend framework that targets micro-frontends and small-scale p
 // main.ts
 import Billion, { CF } from '../../billionjs/src';
 
-// render a simple button in screen with onclick event
+// Simple button counter app
 const App: CF = () => {
     return Billion.newTemplate(
         'button',

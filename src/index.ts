@@ -2,6 +2,7 @@ import { CF } from './component';
 import { Plugin } from './plugin';
 import { newTemplate, templateToElement } from './template';
 import { newComponent } from './component';
+import { createStore } from './state';
 
 // the Billion app type
 export type Billion = {
@@ -29,4 +30,4 @@ const createApp = (selector: string, component: CF): Billion => {
     return app;
 };
 
-export default { createApp, newTemplate, newComponent };
+export { createApp, newTemplate, newComponent, createStore };
