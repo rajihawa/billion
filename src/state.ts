@@ -25,18 +25,6 @@ export type StoreOptions<S, R, M, U extends UseCaseArgs> = {
     useCases?: UseCaseFunctions<S, R, M, U>;
 };
 
-export type Repository<S> = {
-    [k: string]: (state: S) => unknown;
-};
-
-export type Mutations<S> = {
-    [k: string]: (state: S, data: unknown) => void;
-};
-
-export type UseCases<S, R, M, U extends UseCaseArgs> = {
-    [k: string]: (this: Store<S, R, M, U>, data: unknown) => unknown;
-};
-
 export type Store<S, R, M, U extends UseCaseArgs> = Plugin & {
     state?: S;
     get: (key: keyof R) => R[keyof R];
@@ -44,10 +32,6 @@ export type Store<S, R, M, U extends UseCaseArgs> = Plugin & {
     apply: (key: keyof M, data: M[keyof M]) => void;
     update: () => void;
 };
-
-// export const createMutations = <S, M>(mutations: MutationFunctions<S,M>): Mutations<> => {
-
-// }
 
 export const createStore = <S, R, M, U extends UseCaseArgs>(options: StoreOptions<S, R, M, U>): Store<S, R, M, U> => {
     return {
