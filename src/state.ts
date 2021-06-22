@@ -10,11 +10,19 @@ type RepositoryFunctions<S, R> = {
     [k in keyof R]: (state: S) => R[k];
 };
 
-export type StoreOptions<S, R, M> = {
+type UseCaseArgs = {
+    [k: string]: (args: never) => unknown;
+};
+
+type UseCaseFunctions<S, R, M, U extends UseCaseArgs> = {
+    [k in keyof U]: (this: Store<S, R, M, U>, data: Parameters<U[k]>[0]) => ReturnType<U[k]>;
+};
+
+export type StoreOptions<S, R, M, U extends UseCaseArgs> = {
     state?: S;
     repository?: RepositoryFunctions<S, R>;
     mutations?: MutationFunctions<S, M>;
-    useCases?: UseCases<S, R, M>;
+    useCases?: UseCaseFunctions<S, R, M, U>;
 };
 
 export type Repository<S> = {
@@ -25,14 +33,14 @@ export type Mutations<S> = {
     [k: string]: (state: S, data: unknown) => void;
 };
 
-export type UseCases<S, R, M> = {
-    [k: string]: (this: Store<S, R, M>, data: unknown) => unknown;
+export type UseCases<S, R, M, U extends UseCaseArgs> = {
+    [k: string]: (this: Store<S, R, M, U>, data: unknown) => unknown;
 };
 
-export type Store<S, R, M> = Plugin & {
+export type Store<S, R, M, U extends UseCaseArgs> = Plugin & {
     state?: S;
     get: (key: keyof R) => R[keyof R];
-    run: (key: keyof UseCases<S, R, M>, data: unknown) => unknown;
+    run: (key: keyof U, data: Parameters<U[keyof U]>[0]) => ReturnType<U[keyof U]>;
     apply: (key: keyof M, data: M[keyof M]) => void;
     update: () => void;
 };
@@ -41,7 +49,7 @@ export type Store<S, R, M> = Plugin & {
 
 // }
 
-export const createStore = <S, R, M>(options: StoreOptions<S, R, M>): Store<S, R, M> => {
+export const createStore = <S, R, M, U extends UseCaseArgs>(options: StoreOptions<S, R, M, U>): Store<S, R, M, U> => {
     return {
         state: options.state,
         run(key, data) {
