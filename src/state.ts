@@ -2,11 +2,15 @@ import { patch } from 'million';
 import { Plugin } from './plugin';
 import { templateToNode } from './template';
 
-export type StoreOptions<S> = {
+type MutationFunctions<S, M> = {
+    [k in keyof M]: (state: S, data: M[k]) => void;
+};
+
+export type StoreOptions<S, M> = {
     state?: S;
     repository?: Repository<S>;
-    mutations?: Mutations<S>;
-    useCases?: UseCases<S>;
+    mutations?: MutationFunctions<S, M>;
+    useCases?: UseCases<S, M>;
 };
 
 export type Repository<S> = {
@@ -17,19 +21,23 @@ export type Mutations<S> = {
     [k: string]: (state: S, data: unknown) => void;
 };
 
-export type UseCases<S> = {
-    [k: string]: (this: Store<S>, data: unknown) => unknown;
+export type UseCases<S, M> = {
+    [k: string]: (this: Store<S, M>, data: unknown) => unknown;
 };
 
-export type Store<S> = Plugin & {
+export type Store<S, M> = Plugin & {
     state?: S;
     get: (key: keyof Repository<S>) => unknown;
-    run: (key: keyof UseCases<S>, data: unknown) => unknown;
-    apply: (key: keyof Mutations<S>, data: unknown) => void;
+    run: (key: keyof UseCases<S, M>, data: unknown) => unknown;
+    apply: (key: keyof M, data: M[keyof M]) => void;
     update: () => void;
 };
 
-export const createStore = <S>(options: StoreOptions<S>): Store<S> => {
+// export const createMutations = <S, M>(mutations: MutationFunctions<S,M>): Mutations<> => {
+
+// }
+
+export const createStore = <S, M>(options: StoreOptions<S, M>): Store<S, M> => {
     return {
         state: options.state,
         run(key, data) {
