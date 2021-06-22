@@ -1,7 +1,15 @@
-import { Template } from './template';
-
-// Component Function Props
-export type CFP<P = unknown> = P;
+import { newTemplate, Template } from './template';
 
 // Component Function
-export type CF<P = unknown> = (props?: CFP<P>) => Template;
+export type CF<P = unknown> = (props?: P) => Template;
+
+export type NewComponent = <P = unknown>() => CF<P>;
+
+export const newComponent = <P = unknown>(cb?: CF<P>): CF<P> => {
+    if (!cb) {
+        return () => {
+            return newTemplate('div');
+        };
+    }
+    return cb;
+};
