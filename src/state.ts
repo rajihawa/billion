@@ -6,11 +6,15 @@ type MutationFunctions<S, M> = {
     [k in keyof M]: (state: S, data: M[k]) => void;
 };
 
-export type StoreOptions<S, M> = {
+type RepositoryFunctions<S, R> = {
+    [k in keyof R]: (state: S) => R[k];
+};
+
+export type StoreOptions<S, R, M> = {
     state?: S;
-    repository?: Repository<S>;
+    repository?: RepositoryFunctions<S, R>;
     mutations?: MutationFunctions<S, M>;
-    useCases?: UseCases<S, M>;
+    useCases?: UseCases<S, R, M>;
 };
 
 export type Repository<S> = {
@@ -21,14 +25,14 @@ export type Mutations<S> = {
     [k: string]: (state: S, data: unknown) => void;
 };
 
-export type UseCases<S, M> = {
-    [k: string]: (this: Store<S, M>, data: unknown) => unknown;
+export type UseCases<S, R, M> = {
+    [k: string]: (this: Store<S, R, M>, data: unknown) => unknown;
 };
 
-export type Store<S, M> = Plugin & {
+export type Store<S, R, M> = Plugin & {
     state?: S;
-    get: (key: keyof Repository<S>) => unknown;
-    run: (key: keyof UseCases<S, M>, data: unknown) => unknown;
+    get: (key: keyof R) => R[keyof R];
+    run: (key: keyof UseCases<S, R, M>, data: unknown) => unknown;
     apply: (key: keyof M, data: M[keyof M]) => void;
     update: () => void;
 };
@@ -37,7 +41,7 @@ export type Store<S, M> = Plugin & {
 
 // }
 
-export const createStore = <S, M>(options: StoreOptions<S, M>): Store<S, M> => {
+export const createStore = <S, R, M>(options: StoreOptions<S, R, M>): Store<S, R, M> => {
     return {
         state: options.state,
         run(key, data) {
