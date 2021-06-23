@@ -3,7 +3,7 @@
 import { createElement, m, VFlags, VNode, VProps, className as MclassName, svg } from 'million';
 import { CssToString, styles } from './styles';
 
-type Tags = HTMLElementTagNameMap & SVGElementTagNameMap;
+export type Tags = HTMLElementTagNameMap & SVGElementTagNameMap;
 
 // template definition
 export type Template = {
