@@ -1,16 +1,18 @@
 import htmlTags from './htmlTags';
 import { newTemplate, Options, Tags, Template } from './template';
 
-type ElementFunc = (...args: [Options<'div'>, Template[] | string] | [Template[] | string]) => Template;
+type ElementFunc<T extends keyof Tags> = (
+    ...args: [Options<T>, Template[] | string] | [Template[] | string]
+) => Template;
 
 type ELements = {
-    [k in keyof Tags]: ElementFunc;
+    [k in keyof Tags]: ElementFunc<keyof Tags>;
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 const elements: ELements = htmlTags.reduce((acc, tag) => {
-    const a: ElementFunc = (...args) => {
+    const a: ElementFunc<typeof tag> = (...args) => {
         if (typeof args[0] == 'string' || Array.isArray(args[0])) {
             return newTemplate(tag, {}, args[0]);
         }
