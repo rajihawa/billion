@@ -5,13 +5,13 @@ type ElementFunc<T extends keyof Tags> = (
     ...args: [Options<T>, Template[] | string] | [Template[] | string]
 ) => Template;
 
-type ELements = {
+type Elements = {
     [k in keyof Tags]: ElementFunc<keyof Tags>;
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
-const elements: ELements = htmlTags.reduce((acc, tag) => {
+const elements: Elements = htmlTags.reduce((acc, tag) => {
     const a: ElementFunc<typeof tag> = (...args) => {
         if (typeof args[0] == 'string' || Array.isArray(args[0])) {
             return newTemplate(tag, {}, args[0]);
