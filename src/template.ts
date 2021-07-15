@@ -12,6 +12,8 @@ export type Template = {
     children?: Template[] | string;
 };
 
+export type TF = () => Template;
+
 // template options
 export type Options<T extends keyof Tags> = VProps &
     Partial<Tags[T]> & {
@@ -22,7 +24,7 @@ export type Options<T extends keyof Tags> = VProps &
     };
 
 // turn the template object into an optimized vnode object to be used by million
-const templateToNode = (template: Template): VNode => {
+export const templateToNode = (template: Template): VNode => {
     const vnode = m(
         template.tag,
         {
@@ -41,14 +43,16 @@ const templateToNode = (template: Template): VNode => {
             ? VFlags.ANY_CHILDREN
             : VFlags.NO_CHILDREN,
     );
-    return !template.options?.ns && template.tag === 'svg' ? svg(vnode) : vnode;
+    const result = !template.options?.ns && template.tag === 'svg' ? svg(vnode) : vnode;
+
+    return result;
 };
 
 // faster and more elegant way to create templates
 export const newTemplate = <T extends keyof Tags>(
     tag: keyof Tags,
-    opts: Options<T>,
-    children: Template[] | string,
+    opts?: Options<T>,
+    children?: Template[] | string,
 ): Template => {
     return {
         tag,

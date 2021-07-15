@@ -1,22 +1,34 @@
-import { createElement } from 'million';
-import { BF, CF } from './component';
+import { CF } from './component';
+import { Plugin } from './plugin';
 import { templateToElement, newTemplate, bfToNode } from './template';
+import { newComponent, BF } from './component';
+import { createStore } from './state';
+import { createElement } from 'million';
 
 // the Billion app type
-type Billion = {
-    render: (component: CF<undefined>) => void;
+export type Billion = {
+    rootEl: HTMLElement | Text | undefined;
+    component: CF<unknown>;
+    use: (plugin: Plugin, ...args: unknown[]) => void;
 };
 
-const billion: Billion = {
-    render: (component) => {
-        // look for #app root element
-        const root = document.querySelector('#app');
-        if (!root) throw new Error('root element #app not found');
-        // parse and inject the component
-        const template = component();
-        const element = templateToElement(template);
-        root.appendChild(element);
-    },
+const createApp = (selector: string, component: CF): Billion => {
+    // look for selected root element
+    const root = document.querySelector(selector) as Billion['rootEl'];
+    if (!root) throw new Error(`root element ${selector} not found`);
+    // parse and inject the component
+    const rootEl = templateToElement(component());
+    root.appendChild(rootEl);
+    // create the app instance
+    const app: Billion = {
+        rootEl,
+        component,
+        use(plugin, ...args) {
+            plugin.implement(this, ...args);
+        },
+    };
+
+    return app;
 };
 
 export const startApp = (querySelector: string, bf: BF): void => {
@@ -26,5 +38,4 @@ export const startApp = (querySelector: string, bf: BF): void => {
     const template = createElement(node);
     root.appendChild(template);
 };
-
-export default { ...billion, newTemplate };
+export { createApp, newTemplate, newComponent, createStore };
