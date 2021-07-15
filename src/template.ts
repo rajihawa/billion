@@ -2,8 +2,7 @@
 // templates are just minimal build blocks, it gets translated to HTML in the end
 import { createElement, m, VFlags, VNode, VProps, className as MclassName, svg } from 'million';
 import { CssToString, styles } from './styles';
-
-type Tags = HTMLElementTagNameMap & SVGElementTagNameMap;
+import { Tags } from './tags';
 
 // template definition
 export type Template = {
