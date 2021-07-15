@@ -1,5 +1,6 @@
-import { CF } from './component';
-import { templateToElement, newTemplate } from './template';
+import { createElement } from 'million';
+import { BF, CF } from './component';
+import { templateToElement, newTemplate, bfToNode } from './template';
 
 // the Billion app type
 type Billion = {
@@ -16,6 +17,14 @@ const billion: Billion = {
         const element = templateToElement(template);
         root.appendChild(element);
     },
+};
+
+export const startApp = (querySelector: string, bf: BF): void => {
+    const root = document.querySelector(querySelector);
+    if (!root) throw new Error(`root element ${querySelector} not found`);
+    const node = bfToNode(bf);
+    const template = createElement(node);
+    root.appendChild(template);
 };
 
 export default { ...billion, newTemplate };

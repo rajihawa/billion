@@ -1,6 +1,7 @@
 // the template engine of billion, Inspired by flutter.
 // templates are just minimal build blocks, it gets translated to HTML in the end
 import { createElement, m, VFlags, VNode, VProps, className as MclassName, svg } from 'million';
+import { BF } from './component';
 import { CssToString, styles } from './styles';
 import { Tags } from './tags';
 
@@ -64,4 +65,55 @@ export const templateToElement = (template: Template): HTMLElement | Text => {
     const vnode = templateToNode(template);
     const element = createElement(vnode);
     return element;
+};
+
+export const bfToNode = (bf: BF): VNode => {
+    const [tags] = bf();
+    const result = parseType(tags);
+    const node = m(
+        result.tag,
+        {
+            key: result['$'],
+            className: result['.'],
+            id: result['#'],
+        },
+        undefined,
+        VFlags.NO_CHILDREN,
+    );
+
+    return result.tag === 'svg' ? svg(node) : node;
+};
+
+const parseType = (str: string) => {
+    let i = str.length - 1;
+    let ch = str[i];
+    let currentWord = '';
+    const result: {
+        tag: string;
+        '.': string;
+        $: string;
+        '#': string;
+    } = {
+        '#': '',
+        '.': '',
+        $: '',
+        tag: '',
+    };
+    while (i >= 0) {
+        if (ch != '.' && ch != '#' && ch != '$') {
+            currentWord = ch + currentWord;
+        } else {
+            result[ch] = result[ch] + currentWord + '';
+            currentWord = '';
+        }
+        if (i == 0) {
+            result['tag'] = currentWord;
+            result['#'] = result['#'].slice(0, -1);
+            result['.'] = result['.'].slice(0, -1);
+            result['$'] = result['$'].slice(0, -1);
+        }
+        i--;
+        ch = str[i];
+    }
+    return result;
 };
