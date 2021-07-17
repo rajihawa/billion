@@ -9,6 +9,8 @@ type BillionType = `${keyof Tags}${Attribute<Attribute>}`;
 
 export type Options = {
     style?: Record<string, string>;
+    watch?: unknown[];
+    onclick?: () => void;
 };
 
 export type bht =

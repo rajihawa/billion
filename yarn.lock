@@ -738,10 +738,10 @@ micromatch@^4.0.2:
     braces "^3.0.1"
     picomatch "^2.2.3"
 
-million@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/million/-/million-0.1.0.tgz#577db2a56fef049fce0572e64dbbfd02ca71da40"
-  integrity sha512-AQelZMcrPluzXNYwlAZjVcud2KKaw6MtPWUgeM+jJhUqjXdRRGq1xIto0Hw3pJ8jvJPe0fCy5106lfQ+AcHHAw==
+million@0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/million/-/million-0.2.0.tgz#2d82df504a8ff24391570ebf5fba9ad2d7c82b04"
+  integrity sha512-DguwPciLCrYsqIndsqeG5lLutOWJqGR3zKf2VOTkvgEK6pmyUqH0cvMSSKT73bBsjWJtmjxFtR2Gv+Iae5By+g==
 
 minimatch@^3.0.4:
   version "3.0.4"

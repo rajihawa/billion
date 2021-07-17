@@ -50,7 +50,7 @@
     },
     "dependencies": {
         "csstype": "^3.0.8",
-        "million": "^0.1.0"
+        "million": "0.2.0"
     },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "^4.27.0",
