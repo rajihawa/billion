@@ -1,41 +1,20 @@
-import { CF } from './component';
-import { Plugin } from './plugin';
-import { templateToElement, newTemplate, bfToNode } from './template';
-import { newComponent, BF } from './component';
-import { createStore } from './state';
-import { createElement } from 'million';
+import { bfToNode } from './template';
+import { createElement, patch } from 'million';
+import { BF } from './bht';
 
-// the Billion app type
-export type Billion = {
-    rootEl: HTMLElement | Text | undefined;
-    component: CF<unknown>;
-    use: (plugin: Plugin, ...args: unknown[]) => void;
-};
-
-const createApp = (selector: string, component: CF): Billion => {
-    // look for selected root element
-    const root = document.querySelector(selector) as Billion['rootEl'];
-    if (!root) throw new Error(`root element ${selector} not found`);
-    // parse and inject the component
-    const rootEl = templateToElement(component());
-    root.appendChild(rootEl);
-    // create the app instance
-    const app: Billion = {
-        rootEl,
-        component,
-        use(plugin, ...args) {
-            plugin.implement(this, ...args);
-        },
-    };
-
-    return app;
-};
+let rootEl: HTMLElement;
+let rootBF: BF;
 
 export const startApp = (querySelector: string, bf: BF): void => {
     const root = document.querySelector(querySelector);
     if (!root) throw new Error(`root element ${querySelector} not found`);
+    rootEl = root as HTMLElement;
+    rootBF = bf;
     const node = bfToNode(bf);
     const template = createElement(node);
     root.appendChild(template);
 };
-export { createApp, newTemplate, newComponent, createStore };
+
+export const reRender = (): void => {
+    patch(rootEl, bfToNode(rootBF));
+};

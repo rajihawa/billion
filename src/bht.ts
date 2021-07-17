@@ -5,4 +5,16 @@ export type Attribute<T extends Attribute = ''> =
     | (T extends '' ? `${'#' | '.' | '$'}${string}` : `${'#' | '.'}${string}${T}`)
     | '';
 
-export type bht = [`${keyof Tags}${Attribute<Attribute>}`];
+type BillionType = `${keyof Tags}${Attribute<Attribute>}`;
+
+export type Options = {
+    style?: Record<string, string>;
+};
+
+export type bht =
+    | [BillionType, Options, ...bht[]]
+    | [BillionType, ...bht[]]
+    | [BillionType, Options, string]
+    | [BillionType, string];
+
+export type BF<P extends unknown = void> = (props: P) => bht;
