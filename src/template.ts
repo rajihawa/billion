@@ -1,11 +1,14 @@
 // the template engine of billion, Inspired by flutter.
 // templates are just minimal build blocks, it gets translated to HTML in the end
-import { m, VFlags, VNode, svg, style, VProps } from 'million';
+import { m, VFlags, VNode, svg, VProps } from 'million';
 import { BF, bht, Options } from './bht';
+import { CssToString } from './styles';
 
 export const bfToNode = (bf: BF): VNode => {
     const params = bf();
-
+    if (params == null) {
+        throw new Error('cant return null');
+    }
     const tag = params[0];
     const result = parseType(tag);
     let str = '';
@@ -19,8 +22,8 @@ export const bfToNode = (bf: BF): VNode => {
     if (Array.isArray(params[1])) {
         bhts = params.slice(1) as bht[];
     } else if (typeof params[1] == 'object') {
-        const newOpts: Options = params[1];
-        opts = { ...opts, ...newOpts, style: newOpts.style ? style(newOpts.style) : '' };
+        const newOpts = params[1] as Options;
+        opts = { ...opts, ...newOpts, style: newOpts.style ? CssToString(newOpts.style) : '' };
         bhts = params.slice(2) as bht[];
     } else if (typeof params[1] == 'string') {
         str = params[1];
@@ -40,9 +43,11 @@ export const bfToNode = (bf: BF): VNode => {
         str
             ? [str]
             : Array.isArray(bhts)
-            ? bhts.map((bht) => {
-                  return bfToNode(() => bht);
-              })
+            ? bhts
+                  .filter((bht) => Boolean(bht))
+                  .map((bht) => {
+                      return bfToNode(() => bht);
+                  })
             : undefined,
         str ? VFlags.ONLY_TEXT_CHILDREN : Array.isArray(bhts) ? VFlags.ANY_CHILDREN : VFlags.NO_CHILDREN,
     );
